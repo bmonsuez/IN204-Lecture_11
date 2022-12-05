@@ -1,3 +1,7 @@
+======= TD 11 : Gestion de la mémoire =======
+
+[[in204:td11|TD 11]]
+
 ====== Partie 1 : allocation d’un buffer ======
 
 Nous considérons une opération de recherche d’une expression régulière dans un fichier. Pour ce faire, il est nécessaire de pouvoir charger en mémoire une certain nombre de caractères du fichier. Et nous allons chercher dans ce buffer, l’expression régulière concernée. Nous continuons à charger le buffer suivant et nous continuons la recherche jusqu’à ce que l’on arrive à la fin du fichier.
@@ -343,3 +347,7 @@ std::map<std::string, std::string> find_all_variables(std::string filename)
     return variables;
 }
 </code>
+
+
+[[in204:td10:part_2|2ie Partie]]
+

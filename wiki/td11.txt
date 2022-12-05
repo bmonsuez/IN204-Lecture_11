@@ -1,0 +1,5 @@
+======= TD 11 : Gestion de la mémoire =======
+
+[[in204:td11::part_1|Partie 1 : allocation d’un buffer]]
+
+[[in204:td11::part_2|Partie 2 : std::shared_ptr & liste simplement chaînée]]
