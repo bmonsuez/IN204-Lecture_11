@@ -51,7 +51,7 @@ std::map<std::string, std::string> find_all_variables(std::string filename)
             // Look inside the buffer for all pattern that 
             // denotes a decimal value.
             iterator current_iterator = buffer;
-            iterator end_iterator = buffer + buffer_size;
+            iterator end_iterator = buffer + number_of_available_chars;
             std::match_results<iterator> match;
             while(current_iterator != end_iterator &&
                 std::regex_search(
