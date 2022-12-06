@@ -43,6 +43,11 @@ private:
     std::shared_ptr<Node> m_back;
     version_type m_version;
 
+public:
+    using value_type = T;
+    using pointer = value_type*;
+    using reference = T&;
+
     class iterator: 
         std::iterator<std::forward_iterator_tag, T>
     {
@@ -57,6 +62,9 @@ private:
         }
 
     public:        
+        using typename std::iterator<std::forward_iterator_tag, T>::pointer;   
+        using typename std::iterator<std::forward_iterator_tag, T>::reference;   
+
         iterator(const List<T>& theList):
              m_list(theList), m_current(), 
              m_version(theList.m_version) {}
@@ -102,7 +110,7 @@ private:
                 && m_current != another.m_current; 
         }
     };
-public:
+
     List(): m_front(), m_back(), m_version(0) {}
     iterator begin() { return iterator(*this, m_front); }
     iterator end() { return iterator(*this); }

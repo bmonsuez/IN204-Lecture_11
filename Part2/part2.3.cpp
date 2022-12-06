@@ -56,7 +56,10 @@ private:
                 throw invalid_iterator();
         }
 
-    public:        
+    public:     
+        using typename std::iterator<std::forward_iterator_tag, T>::pointer;   
+        using typename std::iterator<std::forward_iterator_tag, T>::reference;   
+
         iterator(const List<T>& theList):
              m_list(theList), m_current() {}
         iterator(const List<T>& theList, 

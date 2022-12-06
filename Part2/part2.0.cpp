@@ -32,12 +32,16 @@ private:
     Node* m_front;
     Node* m_back;
 
+public:
     class iterator: 
         std::iterator<std::forward_iterator_tag, T>
     {
     private:
         Node* m_current;
     public:        
+        using typename std::iterator<std::forward_iterator_tag, T>::pointer;   
+        using typename std::iterator<std::forward_iterator_tag, T>::reference;   
+
         iterator(Node* node): m_current(node)
         {}
         iterator& operator++()
@@ -64,7 +68,7 @@ private:
         bool operator == (const iterator& another) { return m_current == another.m_current; }
         bool operator != (const iterator& another) { return m_current != another.m_current; }
     };
-public:
+
     List(): m_front(NULL), m_back(NULL) {}
     ~List()
     {

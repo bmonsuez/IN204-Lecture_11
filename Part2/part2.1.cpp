@@ -7,6 +7,10 @@ template<typename T>
 class List
 {
 private:
+    using value_type = T;
+    using pointer = value_type*;
+    using reference = T&;
+
     struct Node
     {
     private:
@@ -33,12 +37,17 @@ private:
     std::shared_ptr<Node> m_front;
     std::shared_ptr<Node> m_back;
 
+public:
     class iterator: 
         std::iterator<std::forward_iterator_tag, T>
     {
     private:
         std::shared_ptr<Node> m_current;
-    public:        
+    public:
+
+        using typename std::iterator<std::forward_iterator_tag, T>::pointer;   
+        using typename std::iterator<std::forward_iterator_tag, T>::reference;   
+        
         iterator(): m_current() {}
         iterator(std::shared_ptr<Node>& node): m_current(node)
         {}
@@ -66,7 +75,7 @@ private:
         bool operator == (const iterator& another) { return m_current == another.m_current; }
         bool operator != (const iterator& another) { return m_current != another.m_current; }
     };
-public:
+
     List(): m_front(NULL), m_back(NULL) {}
     iterator begin() { return iterator(m_front); }
     iterator end() { return iterator(); }
