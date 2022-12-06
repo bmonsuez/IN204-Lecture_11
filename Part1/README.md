@@ -58,7 +58,7 @@ std::map<std::string, std::string> find_all_variables(std::string filename)
                     current_iterator, end_iterator, 
                     match, match_variables))
             {
-                variables[match[0].str()] = match.length();
+                variables[match[1].str()] = match[2].str();
                 std::advance(current_iterator, match.length());
             }            
         }
