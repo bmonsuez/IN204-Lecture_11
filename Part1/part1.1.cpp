@@ -11,14 +11,13 @@ std::regex match_variables(
 
 std::map<std::string, std::string> find_all_variables(std::string filename)
 {
-    std::map<std::string, std::string> variables;
-    std::vector<double> values;
     const size_t buffer_size = 1024;
-    std::array<char, buffer_size> buffer;
     using iterator = std::array<char, buffer_size>::iterator;
-    std::ifstream stream(filename);
-    ptrdiff_t start = 0;
 
+    std::array<char, buffer_size> buffer;
+    std::map<std::string, std::string> variables;
+
+    std::ifstream stream(filename);
     while(!stream.eof() && !stream.fail())
     {
         // Load the buffer
@@ -26,8 +25,8 @@ std::map<std::string, std::string> find_all_variables(std::string filename)
         size_t number_of_available_chars = 
             stream.eof() ? (size_t)stream.gcount() : buffer_size;
         
-        // Look inside the buffer for all pattern that 
-        // denotes a decimal value.
+        // Look inside the buffer for all patterns that 
+        // matches a variable declaration.
         iterator current_iterator = buffer.begin();
         iterator end_iterator = buffer.end();
         std::match_results<iterator> match;
@@ -37,7 +36,7 @@ std::map<std::string, std::string> find_all_variables(std::string filename)
                 match, match_variables))
         {
             variables[match[1].str()] = match[2].str();
-            std::advance(current_iterator, match.length());
+            current_iterator = match[0].second;
         }            
     }
     return variables;
