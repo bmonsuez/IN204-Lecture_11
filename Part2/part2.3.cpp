@@ -43,8 +43,7 @@ private:
     std::shared_ptr<Node> m_back;
     version_type m_version;
 
-    class iterator: 
-        std::iterator<std::forward_iterator_tag, T>
+    class iterator
     {
     private:
         std::weak_ptr<Node> m_current;
@@ -57,8 +56,12 @@ private:
         }
 
     public:     
-        using typename std::iterator<std::forward_iterator_tag, T>::pointer;   
-        using typename std::iterator<std::forward_iterator_tag, T>::reference;   
+        using difference_type = typename std::iterator_traits<T*>::difference_type;
+        using value_type = typename std::iterator_traits<T*>::value_type;
+        using pointer = typename std::iterator_traits<T*>::pointer;
+        using reference = typename std::iterator_traits<T*>::reference;
+        using iterator_category = typename std::forward_iterator_tag;
+        using iterator_concept = typename std::forward_iterator_tag;
 
         iterator(const List<T>& theList):
              m_list(theList), m_current() {}

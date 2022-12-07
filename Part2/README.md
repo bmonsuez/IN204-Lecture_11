@@ -210,12 +210,19 @@ private:
     std::shared_ptr<Node> m_front;
     std::shared_ptr<Node> m_back;
 
-    class iterator: 
-        std::iterator<std::forward_iterator_tag, T>
+    class iterator
     {
     private:
         std::shared_ptr<Node> m_current;
+
     public:        
+        using difference_type = typename std::iterator_traits<T*>::difference_type;
+        using value_type = typename std::iterator_traits<T*>::value_type;
+        using pointer = typename std::iterator_traits<T*>::pointer;
+        using reference = typename std::iterator_traits<T*>::reference;
+        using iterator_category = typename std::forward_iterator_tag;
+        using iterator_concept = typename std::forward_iterator_tag;
+
         iterator(): m_current() {}
         iterator(std::shared_ptr<Node>& node): m_current(node)
         {}
@@ -353,11 +360,10 @@ public:
 ```
 Une fois ces modifications faites, il faut modifier la classe itérateur `List<T>::iterator`. Désormais cette classe doit stocker une référence à la liste ainsi que doit initialiser un champ `m_version` avec le numéro de version définie par la liste au moment de la création de l'itérateur.
 
-Il faut en conséquence ajouter les deux champs et modifier les constructeurs comme suit :
+Il faut en conséquence ajouter les deux champs, définir les types attendus par un itérateur et modifier les constructeurs comme suit :
 
 ```cpp
-    class iterator: 
-        std::iterator<std::forward_iterator_tag, T>
+    class iterator
     {
     private:
         std::shared_ptr<Node> m_current;
@@ -365,6 +371,13 @@ Il faut en conséquence ajouter les deux champs et modifier les constructeurs co
         typename List<T>::version_type m_version;
         ...
     public:
+        using difference_type = typename std::iterator_traits<T*>::difference_type;
+        using value_type = typename std::iterator_traits<T*>::value_type;
+        using pointer = typename std::iterator_traits<T*>::pointer;
+        using reference = typename std::iterator_traits<T*>::reference;
+        using iterator_category = typename std::forward_iterator_tag;
+        using iterator_concept = typename std::forward_iterator_tag;
+
         iterator(const List<T>& theList):
              m_list(theList), m_current(), 
              m_version(theList.m_version) {}
@@ -380,8 +393,7 @@ Il faut en conséquence ajouter les deux champs et modifier les constructeurs co
 Ensuite, chaque méthode de l'itérateur doit vérifier que l'itérateur est valide. Pour factoriser le code, nous proposons de définir une méthode `check_if_is_valid` qui vérifie que l'itérateur est bien valide et si ce n'est le cas lève l'exception `invalid_iterator`.
 
 ```cpp
-    class iterator: 
-        std::iterator<std::forward_iterator_tag, T>
+    class iterator
     {
     private:
         ...
@@ -399,8 +411,7 @@ Ensuite, chaque méthode de l'itérateur doit vérifier que l'itérateur est val
 Enfin pour chacun que méthodes qui manipulent l'itérateur, comme les opérateurs d'accès à l'élément, les opérateurs d'incrémentation, il est nécessaire d'appeler la méthode privée `check_if_is_valid` pour s'assurer que l'itérateur est valide.
 
 ```cpp
-    class iterator: 
-        std::iterator<std::forward_iterator_tag, T>
+    class iterator
     {
         ...
         iterator& operator++()
@@ -481,8 +492,7 @@ private:
     std::shared_ptr<Node> m_back;
     version_type m_version;
 
-    class iterator: 
-        std::iterator<std::forward_iterator_tag, T>
+    class iterator
     {
     private:
         std::shared_ptr<Node> m_current;
@@ -495,6 +505,13 @@ private:
         }
 
     public:        
+        using difference_type = typename std::iterator_traits<T*>::difference_type;
+        using value_type = typename std::iterator_traits<T*>::value_type;
+        using pointer = typename std::iterator_traits<T*>::pointer;
+        using reference = typename std::iterator_traits<T*>::reference;
+        using iterator_category = typename std::forward_iterator_tag;
+        using iterator_concept = typename std::forward_iterator_tag;
+
         iterator(const List<T>& theList):
              m_list(theList), m_current(), 
              m_version(theList.m_version) {}
@@ -595,8 +612,7 @@ Désormais, si nous souhaitons implanter un itérateur qui détermine si la coll
 La solution consiste à utiliser dans la classe `iterator` un `std::weak_ptr` en lieu et place d'un `std::shared_ptr` pour faire référence au nœud de la liste. 
 
 ```cpp
-    class iterator: 
-        std::iterator<std::forward_iterator_tag, T>
+    class iterator
     {
     private:
         std::weak_ptr<Node> m_current;
@@ -607,8 +623,8 @@ La solution consiste à utiliser dans la classe `iterator` un `std::weak_ptr` en
 ```
 Nous modifions ensuite le code de la méthode `check_if_is_valid` pour tester en premier si la référence au nœud est toujours valide. Si elle n'est plus valide, cela signifie soit que le nœud a été supprimé, soit que la collection a été détruite.
 
-    class iterator: 
-        std::iterator<std::forward_iterator_tag, T>
+```cpp
+    class iterator
     {
     private:
         ...
@@ -619,6 +635,7 @@ Nous modifions ensuite le code de la méthode `check_if_is_valid` pour tester en
         }
         ...
     };
+```
 
 Il faut ensuite modifier les méthodes qui accèdent au nœud pour obtenir un `std::shared_ptr` le temps nécessaire pour effectuer l'opération. Ce `std::shared_ptr` sera automatiquement détruit au plus tard à la fin de la méthode.
 
@@ -695,8 +712,7 @@ private:
     std::shared_ptr<Node> m_back;
     version_type m_version;
 
-    class iterator: 
-        std::iterator<std::forward_iterator_tag, T>
+    class iterator
     {
     private:
         std::weak_ptr<Node> m_current;
@@ -709,6 +725,13 @@ private:
         }
 
     public:        
+        using difference_type = typename std::iterator_traits<T*>::difference_type;
+        using value_type = typename std::iterator_traits<T*>::value_type;
+        using pointer = typename std::iterator_traits<T*>::pointer;
+        using reference = typename std::iterator_traits<T*>::reference;
+        using iterator_category = typename std::forward_iterator_tag;
+        using iterator_concept = typename std::forward_iterator_tag;
+
         iterator(const List<T>& theList):
              m_list(theList), m_current() {}
         iterator(const List<T>& theList, 
